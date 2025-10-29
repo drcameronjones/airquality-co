@@ -7,6 +7,7 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import Research from "./pages/Research";
 import Team from "./pages/Team";
+import WhyCleanAir from "./pages/WhyCleanAir";
 import GetInvolved from "./pages/GetInvolved";
 import AdminLeads from "./pages/AdminLeads";
 
@@ -15,8 +16,9 @@ function Router() {
     <Switch>
       <Route path={"/"} component={Home} />
       <Route path={"/research"} component={Research} />
-      <Route path={"/team"} component={Team} />
-      <Route path={"/get-involved"} component={GetInvolved} />
+      <Route path="/team" component={Team} />
+      <Route path="/why-clean-air" component={WhyCleanAir} />
+      <Route path="/get-involved" component={GetInvolved} />
       <Route path={"/admin/leads"} component={AdminLeads} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />

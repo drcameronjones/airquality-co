@@ -34,6 +34,11 @@ export default function Navigation() {
                 Team
               </a>
             </Link>
+            <Link href="/why-clean-air">
+              <a className="text-gray-700 hover:text-blue-600 transition-colors">
+                Why Clean Air
+              </a>
+            </Link>
             <Link href="/get-involved">
               <Button variant="default">Get Involved</Button>
             </Link>
@@ -77,6 +82,14 @@ export default function Navigation() {
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Team
+              </a>
+            </Link>
+            <Link href="/why-clean-air">
+              <a
+                className="block text-gray-700 hover:text-blue-600 transition-colors"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Why Clean Air
               </a>
             </Link>
             <Link href="/get-involved">
