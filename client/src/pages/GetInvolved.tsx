@@ -7,7 +7,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
 import { Users, TrendingUp, Briefcase } from "lucide-react";
 
@@ -20,7 +19,7 @@ export default function GetInvolved() {
     message: "",
   });
 
-  const createLead = trpc.leads.create.useMutation();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,18 +29,40 @@ export default function GetInvolved() {
       return;
     }
 
+    setIsSubmitting(true);
     try {
-      await createLead.mutateAsync(formData);
-      toast.success("Thank you! We'll be in touch soon.");
-      setFormData({
-        name: "",
-        email: "",
-        organization: "",
-        interestArea: "general",
-        message: "",
+      const response = await fetch('/api/submit-interest', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          organization: formData.organization,
+          areaOfInterest: formData.interestArea,
+          message: formData.message,
+        }),
       });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        toast.success(data.message || "Thank you! We'll be in touch soon.");
+        setFormData({
+          name: "",
+          email: "",
+          organization: "",
+          interestArea: "general",
+          message: "",
+        });
+      } else {
+        toast.error(data.error || "Something went wrong. Please try again.");
+      }
     } catch (error) {
-      toast.error("Something went wrong. Please try again.");
+      toast.error("Something went wrong. Please try again or email us directly.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -305,9 +326,9 @@ export default function GetInvolved() {
                       type="submit"
                       size="lg"
                       className="w-full"
-                      disabled={createLead.isPending}
+                      disabled={isSubmitting}
                     >
-                      {createLead.isPending ? "Submitting..." : "Submit Your Interest"}
+                      {isSubmitting ? "Submitting..." : "Submit Your Interest"}
                     </Button>
                   </form>
                 </CardContent>
