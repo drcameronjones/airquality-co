@@ -5,14 +5,13 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
 import { Activity, Cloud, TrendingUp, Zap } from "lucide-react";
 
 export default function Home() {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
-  const createLead = trpc.leads.create.useMutation();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,17 +21,35 @@ export default function Home() {
       return;
     }
 
+    setIsSubmitting(true);
     try {
-      await createLead.mutateAsync({
-        name,
-        email,
-        interestArea: "general",
+      const response = await fetch('/api/submit-interest', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          organization: '',
+          areaOfInterest: 'general',
+          message: 'Signed up via homepage waitlist',
+        }),
       });
-      toast.success("Thank you! We'll be in touch soon.");
-      setName("");
-      setEmail("");
+
+      const data = await response.json();
+
+      if (response.ok) {
+        toast.success(data.message || "Thank you! We'll be in touch soon.");
+        setName("");
+        setEmail("");
+      } else {
+        toast.error(data.error || "Something went wrong. Please try again.");
+      }
     } catch (error) {
-      toast.error("Something went wrong. Please try again.");
+      toast.error("Something went wrong. Please try again or email us directly.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -248,9 +265,9 @@ export default function Home() {
                   type="submit" 
                   size="lg" 
                   variant="secondary"
-                  disabled={createLead.isPending}
-                >
-                  {createLead.isPending ? "Submitting..." : "Get Updates"}
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Submitting..." : "Get Updates"}
                 </Button>
               </form>
             </div>
