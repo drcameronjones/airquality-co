@@ -200,12 +200,18 @@ export default function Research() {
                       <li>Team expertise and scientific committee</li>
                     </ul>
                   </div>
-                  <a href="/airquality-pitch-deck.pptx" download>
-                    <Button className="inline-flex items-center gap-2">
-                      <Download className="h-4 w-4" />
-                      Download Pitch Deck (PPTX)
-                    </Button>
-                  </a>
+                  <div className="bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                    <p className="text-gray-600 font-medium mb-2">
+                      Pitch Deck Available Upon Request
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      Please contact us at{" "}
+                      <a href="mailto:cameron@drcameronjones.com" className="text-blue-600 hover:underline">
+                        cameron@drcameronjones.com
+                      </a>
+                      {" "}to request access to our investor pitch deck.
+                    </p>
+                  </div>
                 </CardContent>
               </Card>
             </div>
